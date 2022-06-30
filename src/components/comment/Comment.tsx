@@ -1,11 +1,9 @@
-import React from "react"
 import { Accordion } from "react-bootstrap"
-import { useDispatch } from "react-redux"
 import { IComment } from "../../models/comment"
-import { addComment, addReply } from "../../redux/slices/commentSlice"
 import { Icon } from '@iconify/react';
 import { CommentItem } from "./CommentItem"
 import { CommentInput } from "./CommentInput"
+import { Comments } from "../../services/callApi"
 
 
 export const CommentContainer = ({ comments, newsId }: { comments: IComment[], newsId: number }) => {
@@ -28,10 +26,9 @@ export const CommentContainer = ({ comments, newsId }: { comments: IComment[], n
 export const CommentList = ({ comments, newsId, parentId = newsId, typeComment = true }:
   { comments?: IComment[], newsId: number, parentId?: number, typeComment?: boolean }) => {
 
-  let dispatch = useDispatch()
-  function handleInput(text: string) {
-    if (typeComment) dispatch(addComment({ newsId: newsId, text: text }))
-    else dispatch(addReply({ newsId: newsId, text: text, commentId: parentId }))
+  async function handleInput(text: string) {
+    if (typeComment) await Comments.add(newsId, text)
+    else await Comments.addReply(newsId, parentId, text)
   }
 
   return (
