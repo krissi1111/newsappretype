@@ -138,7 +138,6 @@ export const SearchTab = () => {
       <Button variant='primary' type='submit'>
         <Icon inline={true} icon='ant-design:file-search-outlined'/> Search
       </Button>
-      <Button onClick={() => News.add()}>Add</Button>
     </Form>
   )
 }
