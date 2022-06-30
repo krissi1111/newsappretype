@@ -1,58 +1,58 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import React, { useEffect } from "react"
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import { NewsCardList } from "./components/newsCards/NewsCardList";
+import { Card, Col, Container, Row } from 'react-bootstrap';
+import { SearchTab } from './components/search/Search';
+import { useDispatch, useSelector } from "react-redux";
+import { selectNewsData } from "./redux/slices/newsSlice";
+import { Header } from "./components/header/Header";
+import { Initializer } from "./services/initialize";
+import { PopularNews } from "./components/newsCards/NewsPopular";
 
 function App() {
+  let newsData2 = useSelector(selectNewsData)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    Initializer(dispatch)
+  }, [dispatch])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <Container fluid style={{ marginTop: '0rem' }}>
+      <Row className='mb-2'>
+        <Header/>
+      </Row>
+      <Row>
+        <Col xl xxl="2">
+          <Wrapper>
+            <SearchTab/>
+          </Wrapper>
+        </Col>
+        <Col xl xxl="8">
+          <Wrapper>
+            <NewsCardList newsCards={newsData2}/>
+          </Wrapper>
+        </Col>
+        <Col xl xxl="2">
+          <PopularNews/>
+        </Col>
+      </Row>
+    </Container>
   );
+}
+
+export const Wrapper = ({ children }: { children: React.ReactNode }) => {
+  return(
+    <Card>
+      <Card.Body>
+        {children}
+      </Card.Body>
+    </Card>
+  )
 }
 
 export default App;
