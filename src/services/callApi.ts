@@ -68,37 +68,25 @@ export const User = {
 }
 
 export const Comments = {
-  getList: (Body: FormData) => {
-    return fetcher({ Method: Method.Post, SubUrl: 'news/commentList', Body: Body })
+  getList: (newsId: number) => {
+    let body = JSON.stringify({ newsId: newsId })
+    return fetcher({ Method: Method.Post, SubUrl: 'news/commentList', Body: body })
   },
-  add: (newsId: number, text: string, userId?: number) => {
-    let body = JSON.stringify({newsId: newsId, text: text, userId: userId})
+  add: (newsId: number, text: string) => {
+    let body = JSON.stringify({ newsId: newsId, text: text })
     return fetcher({ Method: Method.Post, SubUrl: 'comment/addComment', Body: body, Auth: true })
   },
-  delete: (Body: FormData) => {
-    return fetcher({ Method: Method.Post, SubUrl: 'comment/deleteComment', Body: Body, Auth: true })
-  },
-  restore: (Body: FormData) => {
-    return fetcher({ Method: Method.Post, SubUrl: 'comment/restoreComment', Body: Body, Auth: true })
-  },
-  edit: (Body: FormData) => {
-    return fetcher({ Method: Method.Patch, SubUrl: 'comment/editComment', Body: Body, Auth: true })
-  }
-}
-
-export const Reply = {
-  add: (newsId: number, commentId: number, text: string, userId?: number) => {
-    let body = JSON.stringify({newsId: newsId, userId: userId, parentId: commentId, text: text})
+  addReply: (newsId: number, commentId: number, text: string) => {
+    let body = JSON.stringify({ newsId: newsId, parentId: commentId, text: text })
     return fetcher({ Method: Method.Post, SubUrl: 'comment/addReply', Body: body, Auth: true })
   },
-  delete: (Body: FormData) => {
-    return fetcher({ Method: Method.Post, SubUrl: 'comment/deleteReply', Body: Body, Auth: true })
+  delete: (newsId: number) => {
+    let body = JSON.stringify({ id: newsId })
+    return fetcher({ Method: Method.Post, SubUrl: 'comment/deleteComment', Body: body, Auth: true })
   },
-  restore: (Body: FormData) => {
-    return fetcher({ Method: Method.Post, SubUrl: 'comment/restoreReply', Body: Body, Auth: true })
-  },
-  edit: (Body: FormData) => {
-    return fetcher({ Method: Method.Patch, SubUrl: 'comment/editReply', Body: Body, Auth: true })
+  edit: ( commentId: number, text: string ) => {
+    let body = JSON.stringify({ id: commentId, text: text })
+    return fetcher({ Method: Method.Patch, SubUrl: 'comment/editComment', Body: body, Auth: true })
   }
 }
 
